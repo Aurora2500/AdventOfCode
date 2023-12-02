@@ -1,4 +1,11 @@
+days=day1 day2
+
 CC=clang++
 
-day1: day1.cpp
+all: $(days)
+
+clean:
+	rm -f $(days)
+
+$(days): %: %.cpp
 	${CC} -o $@ $<
