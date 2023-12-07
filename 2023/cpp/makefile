@@ -1,4 +1,5 @@
-days=day1 day2 day3 day4 day5 day6 day7
+max_day = 7
+days=$(shell seq ${max_day} | sed 's/^/day/')
 
 CC=clang++
 CFLAGS= -std=c++20 -ggdb

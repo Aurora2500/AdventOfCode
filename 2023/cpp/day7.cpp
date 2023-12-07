@@ -1,10 +1,12 @@
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <charconv>
 #include <algorithm>
 
 enum class CardRank
 {
+	Joker,
 	Two,
 	Three,
 	Four,
@@ -14,7 +16,6 @@ enum class CardRank
 	Eight,
 	Nine,
 	Trickster,
-	Joker,
 	Queen,
 	King,
 	Ace,
@@ -40,33 +41,56 @@ class Play
 
 	PlayType compute_type()
 	{
+		int jokerCount = 0;
 		int counts[(int)CardRank::NumRanks] = {0};
 		for (int i = 0; i < 5; i++)
+		{
 			counts[(int)play[i]]++;
+			if (play[i] == CardRank::Joker)
+				jokerCount++;
+		}
 
 		// check for five of a kind
 		for (int i = 0; i < (int)CardRank::NumRanks; i++)
 		{
-			if (counts[i] == 5)
+			if (i == (int)CardRank::Joker)
+				continue;
+			if (counts[i] + jokerCount == 5)
 				return PlayType::FiveKind;
-			if (counts[i] == 4)
-				return PlayType::FourKind;
 		}
-
-		// check for house
-		bool has_three = false;
-		bool has_two = false;
 		for (int i = 0; i < (int)CardRank::NumRanks; i++)
 		{
-			if (counts[i] == 3)
-				has_three = true;
-			if (counts[i] == 2)
-				has_two = true;
+			if (i == (int)CardRank::Joker)
+				continue;
+			if (counts[i] + jokerCount == 4)
+				return PlayType::FourKind;
 		}
-		if (has_three && has_two)
-			return PlayType::House;
-		if (has_three)
-			return PlayType::ThreeKind;
+		// check for house
+		for (int k = 0; k <= jokerCount; k++)
+		{
+			for (int i = 0; i < (int)CardRank::NumRanks; i++)
+			{
+				if (i == (int)CardRank::Joker)
+					continue;
+				for (int j = 0; j < (int)CardRank::NumRanks; j++)
+				{
+					if (j == (int)CardRank::Joker)
+						continue;
+					if (i == j)
+						continue;
+					if (counts[i] + k == 3 && counts[j] + (jokerCount - k) == 2)
+						return PlayType::House;
+				}
+			}
+		}
+
+		for (int i = 0; i < (int)CardRank::NumRanks; i++)
+		{
+			if (i == (int)CardRank::NumRanks)
+				continue;
+			if (counts[i] + jokerCount == 3)
+				return PlayType::ThreeKind;
+		}
 
 		int num_pairs = 0;
 		for (int i = 0; i < (int)CardRank::NumRanks; i++)
@@ -74,9 +98,9 @@ class Play
 			if (counts[i] == 2)
 				num_pairs++;
 		}
-		if (num_pairs == 2)
+		if (num_pairs == 2 || (num_pairs == 1 && jokerCount == 1) || jokerCount == 2)
 			return PlayType::TwoPair;
-		if (num_pairs == 1)
+		if (num_pairs == 1 || jokerCount == 1)
 			return PlayType::Pair;
 		return PlayType::High;
 	}
@@ -104,7 +128,7 @@ public:
 	// to string
 	friend std::ostream &operator<<(std::ostream &os, const Play &play)
 	{
-		os << "Bid: " << play.bid << " Play: ";
+		// os << "Bid: " << std::setfill(' ') << std::setw(4) << play.bid << " Play: ";
 		for (int i = 0; i < 5; i++)
 		{
 			if (play.play[i] == CardRank::Two)
@@ -135,6 +159,7 @@ public:
 				os << "A";
 		}
 
+		/*
 		os << " Type: ";
 		if (play.type == PlayType::High)
 			os << "High";
@@ -150,6 +175,7 @@ public:
 			os << "FourKind";
 		else if (play.type == PlayType::FiveKind)
 			os << "FiveKind";
+			*/
 		return os;
 	}
 };
@@ -207,7 +233,7 @@ std::vector<Play> parse(std::istream &in)
 
 void part1(std::vector<Play> &plays)
 {
-	int sum = 0;
+	u_int64_t sum = 0;
 	int rank = 1;
 	for (auto &p : plays)
 		sum += p.get_bid() * rank++;
@@ -220,6 +246,9 @@ int main()
 	std::vector<Play> plays = parse(std::cin);
 	std::sort(plays.begin(), plays.end(), [](const Play &a, const Play &b)
 						{ return a < b; });
+
+	for (auto &p : plays)
+		std::cout << p << std::endl;
 
 	part1(plays);
 }
