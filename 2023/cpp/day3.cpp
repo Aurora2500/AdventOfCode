@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <map>
 #include <charconv>
+#include <memory>
 
 struct part_number
 {
@@ -25,7 +26,7 @@ class schematic
 public:
 	std::vector<part_number> parts;
 	std::vector<std::unordered_map<int, gear *>> symbols;
-	std::vector<gear> gears;
+	std::vector<std::unique_ptr<gear>> gears;
 };
 
 schematic parse(std::istream &input)
@@ -36,7 +37,6 @@ schematic parse(std::istream &input)
 	int i = 0;
 	while (std::getline(input, line))
 	{
-		line.push_back('.');
 		s.symbols.emplace_back();
 		std::unordered_map<int, gear *> &symbols = s.symbols.back();
 		int j = 0;
@@ -51,7 +51,7 @@ schematic parse(std::istream &input)
 			{
 				// collect whole number
 				int num_len = 1;
-				while (std::isdigit(line.at(j + num_len)))
+				while (num_len + j < line.length() && std::isdigit(line.at(j + num_len)))
 				{
 					num_len++;
 				}
@@ -66,8 +66,8 @@ schematic parse(std::istream &input)
 			if (line.at(j) == '*')
 			{
 				gear g = {.numbers = {0}, .num_parts = 0};
-				s.gears.push_back(g);
-				symbols.emplace(j, &s.gears.back());
+				s.gears.emplace_back(std::make_unique<gear>(g));
+				symbols.emplace(j, &*s.gears.back());
 			}
 			else
 			{
@@ -78,20 +78,15 @@ schematic parse(std::istream &input)
 		i++;
 	}
 
-	return s;
-}
-
-schematic parse2(schematic &schem)
-{
-	for (const part_number &pn : schem.parts)
+	for (const part_number &pn : s.parts)
 	{
-		for (int i = std::max(0, pn.row - 1); i <= std::min((int)schem.symbols.size() - 1, pn.row + 1); i++)
+		for (int i = std::max(0, pn.row - 1); i <= std::min((int)s.symbols.size() - 1, pn.row + 1); i++)
 		{
 			for (int j = std::max(0, pn.start - 1); j <= pn.end; j++)
 			{
-				if (schem.symbols.at(i).contains(j))
+				if (s.symbols.at(i).contains(j))
 				{
-					gear *g = schem.symbols.at(i).at(j);
+					gear *g = s.symbols.at(i).at(j);
 					if (g == nullptr)
 						continue;
 					if (g->num_parts < 2)
@@ -104,18 +99,18 @@ schematic parse2(schematic &schem)
 		}
 	}
 
-	return schem;
+	return s;
 }
 
 void part2(const schematic &schem)
 {
 	int acc = 0;
 
-	for (const gear &g : schem.gears)
+	for (auto &g : schem.gears)
 	{
-		if (g.num_parts == 2)
+		if (g->num_parts == 2)
 		{
-			acc += g.numbers[0] * g.numbers[1];
+			acc += g->numbers[0] * g->numbers[1];
 		}
 	}
 	std::cout << "Part 2: " << acc << std::endl;
@@ -146,11 +141,7 @@ void part1(schematic &schem)
 
 int main()
 {
-	// std::cout << input << std::endl;
-	// std::stringstream ss(input);
-	std::ifstream i("input3");
-	schematic schem = parse(i);
-	schem = parse2(schem);
+	schematic schem = parse(std::cin);
 	part1(schem);
 	part2(schem);
 }
