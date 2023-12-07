@@ -1,8 +1,9 @@
-days=day1 day2 day3 day4 day5
+max_day=5
+days=$(shell seq ${max_day} | sed 's/^/day/')
 
 CC=clang++
 
-CFLAGS= -std=c++20
+CFLAGS= -std=c++20 -ggdb
 
 all: $(days)
 
