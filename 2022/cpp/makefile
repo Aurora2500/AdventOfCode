@@ -1,9 +1,11 @@
-max_day=5
+max_day=7
 days=$(shell seq ${max_day} | sed 's/^/day/')
 
 CC=clang++
 
 CFLAGS= -std=c++20 -ggdb
+
+default: day${max_day}
 
 all: $(days)
 
