@@ -4,6 +4,8 @@
 #include <vector>
 #include <numeric>
 
+#include "util.hpp"
+
 class node;
 enum class direction;
 
@@ -112,9 +114,8 @@ void part1(nodemap &map, directions &dirs)
 	const std::string start("AAA");
 	noderef curr = map[start];
 	int i = 0;
-	while (true)
+	for (auto &dir : cycle(dirs))
 	{
-		direction dir = dirs[i % dirs.size()];
 		curr = curr->go(dir);
 		i++;
 		if (curr->get_name() == goal)

@@ -17,3 +17,59 @@ int take_int(std::string_view &sv)
 		len++;
 	return take_int(sv, len);
 }
+
+template <class T>
+struct cycle_iter
+{
+	std::vector<T> &xs;
+	size_t i;
+
+	T &operator*()
+	{
+		return xs[i];
+	}
+
+	T &operator->()
+	{
+		return xs[i];
+	}
+
+	cycle_iter &operator++()
+	{
+		i = (i + 1) % xs.size();
+		return *this;
+	}
+
+	cycle_iter operator++(int)
+	{
+		cycle_iter c = *this;
+		i = (i + 1) % xs.size();
+		return c;
+	}
+
+	bool operator==(const cycle_iter &other)
+	{
+		return xs == other.xs && i == other.i;
+	}
+
+	bool operator!=(const cycle_iter &other)
+	{
+		return !(*this == other);
+	}
+
+	cycle_iter begin()
+	{
+		return *this;
+	}
+
+	cycle_iter end()
+	{
+		return {xs, xs.size()};
+	}
+};
+
+template <class T>
+cycle_iter<T> cycle(std::vector<T> &xs)
+{
+	return {xs, 0};
+}
