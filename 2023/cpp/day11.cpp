@@ -84,7 +84,5 @@ int main()
 {
 	image img = parse(std::cin);
 	expand_count(img, 1, 1);
-	expand_count(img, 10 - 1, 1);
-	expand_count(img, 100 - 1, 1);
 	expand_count(img, 1000000 - 1, 2);
 }
