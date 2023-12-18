@@ -8,8 +8,9 @@ enum class direction
 	Down,
 	Left,
 	Right,
-	NumDirs,
 };
+
+constexpr int num_dirs = 4;
 
 direction opposite(direction dir)
 {
@@ -33,11 +34,11 @@ struct pos
 
 struct pipe
 {
-	bool dirs[(int)direction::NumDirs];
+	bool dirs[num_dirs];
 
 	pipe(char c)
 	{
-		for (int i = 0; i < (int)direction::NumDirs; i++)
+		for (int i = 0; i < num_dirs; i++)
 			dirs[i] = false;
 		switch (c)
 		{
@@ -66,7 +67,7 @@ struct pipe
 			dirs[(int)direction::Right] = true;
 			break;
 		case 'S':
-			for (int i = 0; i < (int)direction::NumDirs; i++)
+			for (int i = 0; i < num_dirs; i++)
 				dirs[i] = true;
 			break;
 		}
@@ -114,7 +115,7 @@ void part1(const std::vector<std::vector<pipe>> &pipes, const pos &start)
 		pos curr = q.front();
 		q.pop_front();
 		int dist = dists[curr.y][curr.x];
-		for (int i = 0; i < (int)direction::NumDirs; i++)
+		for (int i = 0; i < num_dirs; i++)
 		{
 			if (pipes[curr.y][curr.x].dirs[i])
 			{
@@ -165,7 +166,7 @@ void part2(std::vector<std::vector<pipe>> &pipes, pos &start)
 		pos curr = q.front();
 		q.pop_front();
 		visited[curr.y][curr.x] = true;
-		for (int i = 0; i < (int)direction::NumDirs; i++)
+		for (int i = 0; i < num_dirs; i++)
 		{
 			if (pipes[curr.y][curr.x].dirs[i])
 			{

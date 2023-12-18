@@ -172,7 +172,6 @@ int energize(const Grid &g, Beam starting)
 	std::list<Beam> open;
 	std::set<Point> passed;
 	open.push_back(starting);
-	int i = 0;
 	while (!open.empty())
 	{
 		Beam beam = open.front();

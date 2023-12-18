@@ -1,8 +1,8 @@
-max_day = 16
+max_day = 18
 days=$(shell seq ${max_day} | sed 's/^/day/')
 
 CC=clang++
-CFLAGS= -std=c++20 -ggdb -O0
+CFLAGS= -std=c++20 -ggdb -O0 -Wall
 
 default: day${max_day}
 
@@ -11,5 +11,5 @@ all: $(days)
 clean:
 	rm -f $(days)
 
-$(days): %: %.cpp
+%: %.cpp
 	${CC} -o $@ $< ${CFLAGS}

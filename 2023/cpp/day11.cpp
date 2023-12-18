@@ -32,7 +32,7 @@ image parse(std::istream &input)
 		i++;
 	} while (std::getline(input, line));
 	img.height = i;
-	return std::move(img);
+	return img;
 }
 
 u64 manhattan(const pos &a, const pos &b)

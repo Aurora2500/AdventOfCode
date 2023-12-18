@@ -2,10 +2,13 @@
 #include <string_view>
 #include <charconv>
 
-int take_int(std::string_view &sv, size_t len)
+using u64 = u_int64_t;
+using i64 = int64_t;
+
+int take_int(std::string_view &sv, size_t len, int base = 10)
 {
 	int x;
-	std::from_chars(sv.data(), sv.data() + len, x);
+	std::from_chars(sv.data(), sv.data() + len, x, base);
 	sv.remove_prefix(len);
 	return x;
 }

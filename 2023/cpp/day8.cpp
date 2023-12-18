@@ -142,7 +142,6 @@ void part2(nodemap &map, directions &dirs)
 	while (true)
 	{
 		direction dir = dirs[i % dirs.size()];
-		int numz = 0;
 		for (int j = 0; j < currs.size(); j++)
 		{
 			currs[j] = currs[j]->go(dir);

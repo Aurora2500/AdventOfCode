@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <numeric>
+#include <format>
 
 #include "util.hpp"
 
@@ -177,6 +178,18 @@ void part1(const std::vector<row> &rows)
 	{
 		table t(r.hint.size(), r.tiles.size());
 		int p = pos2(t, r.hint, r.tiles, 0, 0);
+		for (int i = 0; i < t.n_hints; ++i)
+		{
+			for (int j = 0; j < t.memo.size() / t.n_hints; ++j)
+			{
+				int n = t.get(i, j);
+				std::cout << ((n != -1) ? std::format("{:5}", t.get(i, j)) : "    .")
+									<< " ";
+			}
+			std::cout << "\n";
+		}
+		std::cout << "\n"
+							<< std::endl;
 		sum += p;
 	}
 	std::cout << "Part 1: " << sum << std::endl;
