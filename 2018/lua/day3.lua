@@ -2,8 +2,8 @@ require "util"
 
 local squares = {}
 
-Utils.per_line(function (l)
-	local _, _, id, x, y, w, h =  string.find(l, "#(%d*) @ (%d*),(%d*): (%d*)x(%d*)")
+Utils.per_line(function(l)
+	local id, x, y, w, h = string.match(l, "#(%d*) @ (%d*),(%d*): (%d*)x(%d*)")
 	x = tonumber(x)
 	y = tonumber(y)
 	w = tonumber(w)
@@ -31,8 +31,8 @@ end
 
 local overlapping = 0
 
-for i=1,#squares do
-	for j=i+1,#squares do
+for i = 1, #squares do
+	for j = i + 1, #squares do
 		local int = intersection(squares[i], squares[j])
 		if int > 0 then
 			overlapping = overlapping + int

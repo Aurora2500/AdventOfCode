@@ -1,4 +1,4 @@
-max_day=7
+max_day=8
 days=$(shell seq ${max_day} | sed 's/^/day/')
 
 CC=clang++
