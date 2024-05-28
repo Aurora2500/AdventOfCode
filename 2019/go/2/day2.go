@@ -7,11 +7,11 @@ import (
 	"strings"
 )
 
-func part1(program []int, out chan int) {
+func execute(program []int, verb, noun int, out chan int) {
 	c := make([]int, len(program))
 	copy(c, program)
-	c[1] = 12
-	c[2] = 2
+	c[1] = noun
+	c[2] = verb
 	i := 0
 	for {
 		if i >= len(c) {
@@ -31,8 +31,21 @@ func part1(program []int, out chan int) {
 	out <- c[0]
 }
 
-func part2(program []int, out chan int) {
+func part1(program []int, out chan int) {
+	execute(program, 2, 12, out)
+}
 
+func part2(program []int, out chan int) {
+	for verb := 0; verb < 100; verb++ {
+		for noun := 0; noun < 100; noun++ {
+			ch := make(chan int)
+			go execute(program, verb, noun, ch)
+			if <-ch == 19690720 {
+				out <- verb + 100*noun
+				return
+			}
+		}
+	}
 }
 
 func main() {
@@ -47,6 +60,9 @@ func main() {
 	}
 
 	ch1 := make(chan int)
+	ch2 := make(chan int)
 	go part1(program, ch1)
+	go part2(program, ch2)
 	println("Part 1:", <-ch1)
+	println("Part 2:", <-ch2)
 }
