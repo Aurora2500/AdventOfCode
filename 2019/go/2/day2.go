@@ -13,17 +13,15 @@ func execute(program []int, verb, noun int, out chan int) {
 	c[1] = noun
 	c[2] = verb
 	i := 0
+program:
 	for {
-		if i >= len(c) {
-			break
-		}
 		switch c[i] {
 		case 1:
 			c[c[i+3]] = c[c[i+1]] + c[c[i+2]]
 		case 2:
 			c[c[i+3]] = c[c[i+1]] * c[c[i+2]]
 		case 99:
-			break
+			break program
 		}
 		i += 4
 	}
