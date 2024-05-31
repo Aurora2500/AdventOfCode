@@ -3,6 +3,7 @@ package main
 import (
 	"io"
 	"os"
+	"strings"
 )
 
 type Image struct {
@@ -38,6 +39,37 @@ func part1(img *Image) int {
 	return target
 }
 
+func part2(img *Image) string {
+	result := make([]int, img.width*img.height)
+	for i := range result {
+		result[i] = 2
+	}
+
+	for i := 0; i < img.LayerCount(); i++ {
+		layer := img.Layer(i)
+		for j, pixel := range layer {
+			if result[j] == 2 {
+				result[j] = pixel
+			}
+		}
+	}
+
+	b := strings.Builder{}
+	b.Grow(img.width * img.height)
+
+	for i := 0; i < img.height; i++ {
+		for j := 0; j < img.width; j++ {
+			if result[i*img.width+j] == 0 {
+				b.Write([]byte(" "))
+			} else {
+				b.Write([]byte("█"))
+			}
+		}
+		b.Write([]byte("\n"))
+	}
+	return b.String()
+}
+
 func main() {
 	bytes, _ := io.ReadAll(os.Stdin)
 
@@ -49,4 +81,7 @@ func main() {
 	image := Image{data, 25, 6}
 	result := part1(&image)
 	println("Part 1:", result)
+	render := part2(&image)
+	println("Part 2:")
+	println(render)
 }
