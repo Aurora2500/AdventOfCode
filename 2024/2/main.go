@@ -31,13 +31,21 @@ func part1(in input) {
 	var safe int
 lines:
 	for _, line := range in {
-		accending := line[1] > line[0]
+		accending := true
+		descending := true
 		for i := 0; i < len(line)-1; i++ {
 			diff := line[i+1] - line[i]
-			if !accending {
-				diff = -diff
+			abs_diff := diff
+			if abs_diff < 0 {
+				abs_diff = -abs_diff
 			}
-			if diff < 1 || diff > 3 {
+			if diff < 0 {
+				accending = false
+			}
+			if diff > 0 {
+				descending = false
+			}
+			if !(accending || descending) || abs_diff < 1 || abs_diff > 3 {
 				continue lines
 			}
 		}
@@ -56,7 +64,8 @@ line:
 			if j >= 0 {
 				subskip = 2
 			}
-			var accending int
+			accending := true
+			descending := true
 			for i := 0; i < len(line)-subskip; i++ {
 				prev := i
 				next := i + 1
@@ -70,19 +79,14 @@ line:
 				if dx == 0 {
 					continue skip
 				}
-				if accending == 0 {
-					if dx < 0 {
-						accending = -1
-					} else if dx > 0 {
-						accending = 1
-					}
-				} else if (accending == 1 && dx < 0) || (accending == -1 && dx > 0) {
-					continue skip
+				if dx > 0 {
+					descending = false
 				}
-				if accending == -1 {
+				if dx < 0 {
+					accending = false
 					dx = -dx
 				}
-				if dx > 3 {
+				if !(accending || descending) || dx > 3 {
 					continue skip
 				}
 			}
