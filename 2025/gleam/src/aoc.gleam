@@ -1,5 +1,6 @@
 import argv
-import day1
+import day1.{main as day01}
+import day2.{main as day02}
 import gleam/io
 import gleam/list
 import gleam/option.{type Option, None, Some}
@@ -31,7 +32,7 @@ fn runner(day: String) -> Nil {
 
   case res {
     Some(#(input, start)) -> start(input)
-    None -> io.println(day <> "is not valid")
+    None -> io.println(day <> " is not a valid target")
   }
 }
 
@@ -49,7 +50,8 @@ fn get_input(day: String) -> Option(String) {
 
 fn get_start(day: String) -> Option(fn(String) -> Nil) {
   case day {
-    "day1" | "test1" -> Some(day1.start)
+    "day1" | "test1" -> Some(day01)
+    "day2" | "test2" -> Some(day02)
     _ -> None
   }
 }

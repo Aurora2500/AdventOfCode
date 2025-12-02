@@ -7,7 +7,7 @@ import gleam/string
 type Sequence =
   List(Int)
 
-pub fn start(input: String) -> Nil {
+pub fn main(input: String) -> Nil {
   let seq = parse_sequence(input)
   io.println("--- Day 1 ---")
   part1(seq)
