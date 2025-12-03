@@ -1,14 +1,16 @@
 import argv
 import day1.{main as day01}
 import day2.{main as day02}
+import day3.{main as day03}
 import gleam/io
 import gleam/list
 import gleam/option.{type Option, None, Some}
-import gleam/result
 import simplifile
 
 const all_days = [
   "day1",
+  "day2",
+  "day3",
 ]
 
 pub fn main() -> Nil {
@@ -43,15 +45,16 @@ fn get_input(day: String) -> Option(String) {
     _ -> None
   }
 
-  use path <- option.map(file)
+  use path <- option.then(file)
 
-  simplifile.read(path) |> result.unwrap("")
+  simplifile.read(path) |> option.from_result()
 }
 
 fn get_start(day: String) -> Option(fn(String) -> Nil) {
   case day {
     "day1" | "test1" -> Some(day01)
     "day2" | "test2" -> Some(day02)
+    "day3" | "test3" -> Some(day03)
     _ -> None
   }
 }

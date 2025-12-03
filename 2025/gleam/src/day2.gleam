@@ -38,9 +38,13 @@ fn part1(recs: Records) -> Nil {
     use sum, rec <- list.fold(list.range(r1, r2), sum)
     let d = digits(rec)
     let n = list.length(d)
-    let s = { n + 1 } / 2
-    let c = list.sized_chunk(d, s)
-    case all_eq(c) && n > 1 {
+    let cond = {
+      use <- bool.guard(n % 2 == 1, False)
+      let s = n / 2
+      list.sized_chunk(d, s)
+      |> all_eq()
+    }
+    case cond {
       True -> {
         sum + rec
       }
@@ -62,8 +66,9 @@ fn part2(recs: Records) -> Nil {
     let cond = {
       use <- bool.guard(n < 2, False)
       use cs <- list.any(list.range(1, { n + 1 } / 2))
-      let c = list.sized_chunk(d, cs)
-      all_eq(c)
+      use <- bool.guard(n % cs != 0, False)
+      list.sized_chunk(d, cs)
+      |> all_eq()
     }
 
     case cond {

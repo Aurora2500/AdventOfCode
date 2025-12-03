@@ -16,3 +16,11 @@ pub fn to_pair(f: fn(a, b) -> c) -> fn(#(a, b)) -> c {
 pub fn eq(lhs: a, rhs: a) -> Bool {
   lhs == rhs
 }
+
+pub fn compose(lhs: fn(b) -> c, rhs: fn(a) -> b) -> fn(a) -> c {
+  fn(x) { lhs(rhs(x)) }
+}
+
+pub fn on(op: fn(b, b) -> c, using: fn(a) -> b) -> fn(a, a) -> c {
+  fn(x, y) { op(using(x), using(y)) }
+}
