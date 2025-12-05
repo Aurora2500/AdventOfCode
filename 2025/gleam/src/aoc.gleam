@@ -2,6 +2,7 @@ import argv
 import day1.{main as day01}
 import day2.{main as day02}
 import day3.{main as day03}
+import day4.{main as day04}
 import gleam/io
 import gleam/list
 import gleam/option.{type Option, None, Some}
@@ -55,6 +56,7 @@ fn get_start(day: String) -> Option(fn(String) -> Nil) {
     "day1" | "test1" -> Some(day01)
     "day2" | "test2" -> Some(day02)
     "day3" | "test3" -> Some(day03)
+    "day4" | "test4" -> Some(day04)
     _ -> None
   }
 }
