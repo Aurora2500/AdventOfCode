@@ -24,3 +24,22 @@ pub fn compose(lhs: fn(b) -> c, rhs: fn(a) -> b) -> fn(a) -> c {
 pub fn on(op: fn(b, b) -> c, using: fn(a) -> b) -> fn(a, a) -> c {
   fn(x, y) { op(using(x), using(y)) }
 }
+
+pub fn not(pred: fn(a) -> Bool) -> fn(a) -> Bool {
+  fn(x) { !pred(x) }
+}
+
+pub fn mapmap(xss: List(List(a)), f: fn(a) -> b) -> List(List(b)) {
+  use xs <- list.map(xss)
+  use x <- list.map(xs)
+  f(x)
+}
+
+pub fn expect(f: fn(a) -> Result(b, c), msg: String) -> fn(a) -> b {
+  fn(x) {
+    case f(x) {
+      Ok(r) -> r
+      _ -> panic as msg
+    }
+  }
+}
