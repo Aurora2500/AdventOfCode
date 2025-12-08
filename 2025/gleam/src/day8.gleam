@@ -25,10 +25,9 @@ fn parse(input: String) -> List(Point) {
 }
 
 fn part1(data: List(Point)) -> Nil {
-  let #(points, sets) = {
-    use #(pd, sd), p, i <- list.index_fold(data, #([], dict.new()))
-    #([#(i, p), ..pd], sd |> dict.insert(i, i))
-  }
+  let sets = dict.new()
+  let points = list.index_map(data, fn(p, i) { #(i, p) })
+
   let dists =
     {
       use #(#(left_id, left_point), #(right_id, right_point)) <- list.map(
