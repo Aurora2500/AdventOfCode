@@ -10,9 +10,14 @@ pub fn split_at(in: String, at: Int) -> #(String, String) {
   )
 }
 
-pub fn while(init: a, cond: fn(a) -> list.ContinueOrStop(a)) -> a {
+pub type Loop(a, b) {
+  Continue(a)
+  Break(b)
+}
+
+pub fn while(init: a, cond: fn(a) -> Loop(a, b)) -> b {
   case cond(init) {
-    list.Continue(n) -> while(n, cond)
-    list.Stop(e) -> e
+    Continue(n) -> while(n, cond)
+    Break(e) -> e
   }
 }

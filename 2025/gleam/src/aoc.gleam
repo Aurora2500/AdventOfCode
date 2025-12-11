@@ -1,5 +1,6 @@
 import argv
 import day1.{main as day01}
+import day10.{main as day10}
 import day2.{main as day02}
 import day3.{main as day03}
 import day4.{main as day04}
@@ -21,6 +22,9 @@ const all_days = [
   "day5",
   "day6",
   "day7",
+  "day8",
+  "day9",
+  "day10",
 ]
 
 pub fn main() -> Nil {
@@ -71,6 +75,7 @@ fn get_start(day: String) -> Option(fn(String) -> Nil) {
     "day7" | "test7" -> Some(day07)
     "day8" | "test8" -> Some(day08)
     "day9" | "test9" -> Some(day09)
+    "day10" | "test10" -> Some(day10)
     _ -> None
   }
 }

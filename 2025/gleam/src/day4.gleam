@@ -1,10 +1,10 @@
 import gleam/bool
 import gleam/int
 import gleam/io
-import gleam/list.{Continue, Stop}
+import gleam/list
 import gleam/set.{type Set}
 import gleam/string
-import utils
+import utils.{Break, Continue}
 
 type Vec {
   Vec(x: Int, y: Int)
@@ -63,7 +63,7 @@ fn part2(map: Map) -> Nil {
     use #(m, removed) <- utils.while(#(map, 0))
     let reach = reachable(m)
     let rl = list.length(reach)
-    use <- bool.guard(rl == 0, Stop(#(m, removed)))
+    use <- bool.guard(rl == 0, Break(#(m, removed)))
     let new_m = list.fold(reach, m, set.delete)
     Continue(#(new_m, removed + rl))
   }
